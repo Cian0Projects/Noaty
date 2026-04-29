@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Noaty</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="gate" class="gate">
+    <form id="gate-form" class="gate-card">
+      <h1>Noaty</h1>
+      <p id="gate-prompt">Enter passcode</p>
+      <input id="gate-input" type="password" autocomplete="off" autofocus>
+      <input id="gate-confirm-input" type="password" autocomplete="off" placeholder="Confirm passcode" style="display:none">
+      <button id="gate-submit" type="submit" class="primary">Unlock</button>
+      <p id="gate-error" class="error"></p>
+    </form>
+  </div>
+
+  <div id="app" class="app hidden">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h2>Noaty</h2>
+        <div class="sidebar-actions">
+          <button id="new-folder" title="New folder at root">+ Folder</button>
+          <button id="new-doc" title="New document at root">+ Doc</button>
+          <button id="settings-btn" title="Settings">Settings</button>
+          <button id="lock-btn" title="Lock">Lock</button>
+        </div>
+      </div>
+      <div id="tree" class="tree"></div>
+      <div id="status" class="status"></div>
+    </aside>
+    <main class="main">
+      <div id="empty" class="empty">Select a document, or create one with <strong>+ Doc</strong>.</div>
+      <div id="editor" class="editor hidden">
+        <div class="editor-header">
+          <input id="doc-title" class="doc-title" type="text" spellcheck="false">
+          <button id="toggle-mode" class="ghost">Edit</button>
+        </div>
+        <div id="view" class="view"></div>
+        <textarea id="edit" class="edit hidden" spellcheck="false" placeholder="Write markdown here. Use - [ ] task to make a clickable checkbox."></textarea>
+      </div>
+    </main>
+  </div>
+
+  <div id="settings-modal" class="modal hidden">
+    <form id="settings-form" class="modal-card">
+      <h2>GitHub sync</h2>
+      <label>Owner (your GitHub username)
+        <input id="cfg-owner" type="text" autocomplete="off" required>
+      </label>
+      <label>Private data repo name
+        <input id="cfg-repo" type="text" autocomplete="off" placeholder="noaty-data" required>
+      </label>
+      <label>Personal access token
+        <input id="cfg-pat" type="password" autocomplete="off" required>
+      </label>
+      <p class="hint">Use a <strong>fine-grained PAT</strong> scoped only to this one repo, with permission <strong>Contents: Read and write</strong>. The token is saved in this browser's localStorage.</p>
+      <div class="modal-actions">
+        <button type="button" id="settings-cancel" class="ghost">Cancel</button>
+        <button type="submit" class="primary">Save & sync</button>
+      </div>
+      <p id="settings-error" class="error"></p>
+    </form>
+  </div>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
