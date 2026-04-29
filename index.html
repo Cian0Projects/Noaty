@@ -37,10 +37,11 @@
       <div id="editor" class="editor hidden">
         <div class="editor-header">
           <input id="doc-title" class="doc-title" type="text" spellcheck="false">
+          <button id="add-task" class="ghost" title="Insert a clickable checkbox at the cursor">+ Task</button>
           <button id="toggle-mode" class="ghost">Edit</button>
         </div>
         <div id="view" class="view"></div>
-        <textarea id="edit" class="edit hidden" spellcheck="false" placeholder="Write markdown here. Use - [ ] task to make a clickable checkbox."></textarea>
+        <textarea id="edit" class="edit hidden" spellcheck="false" placeholder="Write markdown. Bullets: -  Tasks: - [ ] thing  (or hit + Task above). Pressing Enter on a task line continues the list."></textarea>
       </div>
     </main>
   </div>

@@ -431,6 +431,63 @@ function setupEditor() {
     doc.updatedAt = new Date().toISOString();
     scheduleSave();
   });
+
+  $("edit").addEventListener("keydown", handleEditorEnter);
+  $("add-task").addEventListener("click", insertTaskAtCursor);
+}
+
+function handleEditorEnter(e) {
+  if (e.key !== "Enter" || e.shiftKey) return;
+  const ta = e.target;
+  const pos = ta.selectionStart;
+  if (pos !== ta.selectionEnd) return;
+
+  const before = ta.value.slice(0, pos);
+  const lineStart = before.lastIndexOf("\n") + 1;
+  const nlAfter = ta.value.indexOf("\n", pos);
+  const lineEnd = nlAfter === -1 ? ta.value.length : nlAfter;
+  const fullLine = ta.value.slice(lineStart, lineEnd);
+  const m = fullLine.match(/^(\s*)([-*+])\s+\[([ xX])\]\s*(.*)$/);
+  if (!m) return;
+
+  const [, indent, bullet, , text] = m;
+  e.preventDefault();
+  const doc = currentDoc();
+
+  if (text.trim() === "") {
+    ta.value = ta.value.slice(0, lineStart) + "\n" + ta.value.slice(lineEnd);
+    ta.selectionStart = ta.selectionEnd = lineStart + 1;
+  } else {
+    const insert = `\n${indent}${bullet} [ ] `;
+    ta.value = before + insert + ta.value.slice(pos);
+    ta.selectionStart = ta.selectionEnd = before.length + insert.length;
+  }
+
+  if (doc) {
+    doc.content = ta.value;
+    doc.updatedAt = new Date().toISOString();
+    scheduleSave();
+  }
+}
+
+function insertTaskAtCursor() {
+  if (!currentDoc()) return;
+  if (!state.editMode) $("toggle-mode").click();
+  const ta = $("edit");
+  ta.focus();
+  const start = ta.selectionStart;
+  const end = ta.selectionEnd;
+  const before = ta.value.slice(0, start);
+  const after = ta.value.slice(end);
+  const needsNewline = before.length > 0 && !before.endsWith("\n");
+  const insert = (needsNewline ? "\n" : "") + "- [ ] ";
+  ta.value = before + insert + after;
+  ta.selectionStart = ta.selectionEnd = before.length + insert.length;
+
+  const doc = currentDoc();
+  doc.content = ta.value;
+  doc.updatedAt = new Date().toISOString();
+  scheduleSave();
 }
 
 // ---------- Status bar ----------
